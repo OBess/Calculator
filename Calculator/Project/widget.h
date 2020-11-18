@@ -11,6 +11,9 @@
 #include <QRegExpValidator>
 #include <QKeyEvent>
 #include <QIcon>
+#include <QClipboard>
+
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -77,6 +80,7 @@ private:
 
     //--*Objects*--
      Ui::Widget *ui;
+     QClipboard *clipboard;
     //--/*Objects/*--
 
     //--*Check*--

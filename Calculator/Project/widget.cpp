@@ -11,6 +11,8 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     ui->FieldAction->setMaxLength(limit);
     ui->FieldAction->setValidator( new QRegExpValidator( QRegExp( "[0-9+*/-().]{0,}" ) ) );
+
+    clipboard = QApplication::clipboard();
 }
 
 Widget::~Widget()
@@ -76,21 +78,20 @@ void Widget::btnAddZeroToLabel(std::string c, QLineEdit* ql){
 }
 void Widget::btnAddBracketsToLabel(QLineEdit* ql, std::string c = "()"){
     if(*(ql->text().end() - 1) != '.' && lastNoneZero(ql->text().toStdString())){
-        if(ql->text().length() == 0){
+        if(ql->text().length() == 0)
             ql->setText(ql->text() + c.c_str()[0]);
-        }else if(matchDigit(ql->text().toStdString().substr(ql->text().length() - 1)) && !matchCorrectBrackets(ql->text().toStdString())){
+        else if(matchDigit(ql->text().toStdString().substr(ql->text().length() - 1)) && !matchCorrectBrackets(ql->text().toStdString()))
             ql->setText(ql->text() + c.c_str()[1]);
-        }else if(matchDigit(ql->text().toStdString().substr(ql->text().length() - 1)) && matchCorrectBrackets(ql->text().toStdString())){
+        else if(matchDigit(ql->text().toStdString().substr(ql->text().length() - 1)) && matchCorrectBrackets(ql->text().toStdString()))
             ql->setText(ql->text() + '*' + c.c_str()[0]);
-        }else if(isOperation(*(ql->text().toStdString().end() - 1))){
+        else if(isOperation(*(ql->text().toStdString().end() - 1)))
             ql->setText(ql->text() + c.c_str()[0]);
-        }else if(*(ql->text().toStdString().end() - 1) == ')' && matchCorrectBrackets(ql->text().toStdString())){
+        else if(*(ql->text().toStdString().end() - 1) == ')' && matchCorrectBrackets(ql->text().toStdString()))
             ql->setText(ql->text() + '*' + c.c_str()[0]);
-        }else if(*(ql->text().toStdString().end() - 1) == ')' && !matchCorrectBrackets(ql->text().toStdString())){
+        else if(*(ql->text().toStdString().end() - 1) == ')' && !matchCorrectBrackets(ql->text().toStdString()))
             ql->setText(ql->text() + c.c_str()[1]);
-        }else{
+        else
             ql->setText(ql->text() + c.c_str()[0]);
-        }
     }
 }
 void Widget::btnAddDotToLabel(QLineEdit* ql, std::string c = "."){
@@ -130,9 +131,8 @@ void Widget::btnAddOperationToLabel(std::string c, QLineEdit* ql) {
     if(lastNoneZero(ql->text().toStdString())){
         if(noFirstZero(ql->text().toStdString())) ql->setText("");
         if(!ql->text().toStdString().empty()){
-            if(!isOperation(*(ql->text().toStdString().end() - 1))){
+            if(!isOperation(*(ql->text().toStdString().end() - 1)))
                 ql->setText(ql->text() + c.c_str());
-            }
             else {
                 std::string str = ql->text().toStdString();
                 ql->setText(QString(str.substr(0, str.length() - 1).c_str()) + c.c_str());
@@ -147,6 +147,7 @@ void Widget::btnSolve(QLineEdit* qlF, QLabel* qlRes){
         std::string str = qlF->text().toStdString();
         double res = distribution(str);
         ss1 << res;
+        clipboard->setText(ss1.str().c_str(), QClipboard::Clipboard);
         qlRes->setText(QString("= ") + ss1.str().c_str());
     }
 }
